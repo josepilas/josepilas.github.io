@@ -420,6 +420,19 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Black text outline for all text elements - automatically applied to any text */
+body, h1, h2, h3, h4, h5, h6, p, a, span, button, label, li, td, th, input, textarea, select, option, blockquote, cite, q, code, pre, em, strong, b, i, u, small, sub, sup, time, mark, figcaption, legend, address, dd, dt, dl, ul, ol {
+    text-shadow: 
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000,
+        0 -1px 0 #000,
+        0 1px 0 #000,
+        -1px 0 0 #000,
+        1px 0 0 #000;
+}
+
 /* Selection Color */
 ::selection {
     background: var(--lime);
