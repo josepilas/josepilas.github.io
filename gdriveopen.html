@@ -29,7 +29,6 @@
 
   pathEl.textContent = path;
 
-  // Segurança: só encaminha caminhos do Google Drive local do usuário.
   const allowedPrefix = 'G:\\Meu Drive\\';
   if (!path.toLowerCase().startsWith(allowedPrefix.toLowerCase())) {
     status.textContent = 'Caminho recusado: somente G:\\Meu Drive\\ é permitido.';
@@ -37,15 +36,14 @@
     return;
   }
 
-  const protocolUrl = 'gdriveopen://open?path=' + encodeURIComponent(path);
-  const launch = () => { location.href = protocolUrl; };
+  // Forma sem host/authority: evita normalizações de //open por navegador/Windows.
+  const protocolUrl = 'gdriveopen:?path=' + encodeURIComponent(path);
+  const launch = () => { window.location.assign(protocolUrl); };
 
   button.hidden = false;
   button.addEventListener('click', launch);
   status.textContent = 'Se o Windows pedir confirmação, escolha abrir o Abridor Drive no G:.';
-
-  // Tenta automaticamente; o botão fica disponível caso o navegador exija gesto adicional.
-  setTimeout(launch, 120);
+  setTimeout(launch, 150);
 })();
 </script>
 </body>
