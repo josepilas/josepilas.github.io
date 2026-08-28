@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Abrir no Google Drive local</title>
+  <style>
+    body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;max-width:760px;margin:48px auto;padding:0 24px;line-height:1.5;color:#171717}
+    .card{border:1px solid #ddd;border-radius:14px;padding:22px}
+    code{word-break:break-all;background:#f4f4f4;padding:2px 5px;border-radius:5px}
+    button{font:inherit;padding:10px 16px;border-radius:9px;border:1px solid #bbb;background:#fff;cursor:pointer}
+    .err{color:#9b1c1c}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Abrindo no seu Google Drive…</h2>
+    <p id="status">Preparando o caminho local.</p>
+    <p><code id="path"></code></p>
+    <button id="open" hidden>Abrir no G:</button>
+  </div>
+<script>
+(() => {
+  const status = document.getElementById('status');
+  const pathEl = document.getElementById('path');
+  const button = document.getElementById('open');
+  const params = new URLSearchParams(location.search);
+  const path = params.get('path') || '';
+
+  pathEl.textContent = path;
+
+  // Segurança: só encaminha caminhos do Google Drive local do usuário.
+  const allowedPrefix = 'G:\\Meu Drive\\';
+  if (!path.toLowerCase().startsWith(allowedPrefix.toLowerCase())) {
+    status.textContent = 'Caminho recusado: somente G:\\Meu Drive\\ é permitido.';
+    status.className = 'err';
+    return;
+  }
+
+  const protocolUrl = 'gdriveopen://open?path=' + encodeURIComponent(path);
+  const launch = () => { location.href = protocolUrl; };
+
+  button.hidden = false;
+  button.addEventListener('click', launch);
+  status.textContent = 'Se o Windows pedir confirmação, escolha abrir o Abridor Drive no G:.';
+
+  // Tenta automaticamente; o botão fica disponível caso o navegador exija gesto adicional.
+  setTimeout(launch, 120);
+})();
+</script>
+</body>
+</html>
